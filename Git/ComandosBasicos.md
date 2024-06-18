@@ -1,36 +1,70 @@
-# Comandos Básicos de Git
-> ## git add
-> - git add -A  (Añade todos los archivos, nuevos, modificados, eliminados, incluyendo los del directorio actual y los de más arriba que pertenezcan al mismo repositorio de git)
-> - git add .   (Añade en directorio entero de manera recursiva, incluyendo archivos que comiencen con un punto)
-> - git add -u  (Añade archivos modificados y eliminados únicamente, no los nuevos)
-> - git add -f  (Fuerza la adición de archivos, incluso si están en la lista del .gitignore)
+# Guía Rápida de Comandos Básicos de Git
 
-> ## git status
-> - Muestra el estado del repositorio
+---
 
-> ## git commit
-> - git commit -m "[Mensaje]"  (Guarda lo añadido al stage con un mensaje)
+## Añadir Cambios
 
-> ## git branch
-> - git branch [Nombre]     (Crea una nueva rama)
-> - git branch -l           (Lista todas las ramas existentes)
-> - git branch -d [Nombre]  (Elimina una rama, para forzarlo se utiliza -D)
+- **Añadir Todo**: `git add -A`
+    - Añade todos los archivos (nuevos, modificados, eliminados) del directorio actual y superiores del repositorio.
+- **Añadir Directorio Actual**: `git add .`
+    - Añade todos los archivos en el directorio actual de manera recursiva, incluyendo archivos que comiencen con un punto.
+- **Añadir Modificados/Eliminados**: `git add -u`
+    - Solo añade archivos modificados y eliminados, excluyendo los nuevos.
+- **Añadir Forzadamente**: `git add -f`
+    - Añade archivos incluso si están en .gitignore.
 
-> ## git checkout 
-> - git checkout [Nombre]     (Cambiamos de rama)
-> - git checkout -b [Nombre]  (Crea una nueva rama y se cambia a ella, si queremos forzar la acción es con -B)
-> - git checkout -m [Nombre]  (Cambia de rama haciendo merge para no perder cambios hechos en la rama anterior, si hay conflictos dse deben resolver)
+## Estado del Repositorio
 
-> ## git fetch
-> - Descarga confirmaciones, archivos y referencias de un repositorio remoto a tu repositorio local.
+- **Ver Estado**: `git status`
+    - Muestra el estado actual del repositorio.
 
-> ## git pull
-> - Ejecuta en primer lugar `git fetch`, que descarga el contenido del repositorio remoto especificado. Después, se ejecuta `git merge` para fusionar las referencias y los encabezados del contenido remoto en una nueva confirmación de fusión local. 
+## Confirmar Cambios
 
-> ## git push
-> - git push                           (Empuja los cambios de la rama actual)
-> - git push [Remoto] [NombreRama]     (Empuja los cambios a la rama remota especificada)
-> - git push -u [Remoto] [NombreRama]  (Empuja los cambios a la rama remota especificada y establece una relación de seguimiento, lo que permite futuros `git push` y `git pull` sin especificar remoto o rama)
+- **Hacer Commit**: `git commit -m "[Mensaje]"`
+    - Guarda los cambios en el repositorio con un mensaje descriptivo.
 
-> ## git merge
-> - En estos casos, `git merge` toma dos punteros de confirmación, normalmente los extremos de la rama, y encuentra una confirmación base común entre ellos. Una vez que Git encuentra una confirmación base en común, crea una "confirmación de fusión" nueva que combina los cambios de cada secuencia de confirmación de fusión puesta en cola.
+## Manejo de Ramas
+
+- **Crear Rama**: `git branch [Nombre]`
+- **Listar Ramas**: `git branch -l`
+- **Eliminar Rama**: `git branch -d [Nombre]`
+    - Para forzar: `git branch -D [Nombre]`
+
+## Cambiar de Rama
+
+- **Cambiar a Rama**: `git checkout [Nombre]`
+- **Crear y Cambiar**: `git checkout -b [Nombre]`
+    - Para forzar: `git checkout -B [Nombre]`
+- **Cambiar con Merge**: `git checkout -m [Nombre]`
+    - Fusiona cambios actuales con la rama a la que se cambia.
+
+## Sincronización con Remoto
+
+- **Descargar Cambios**: `git fetch`
+    - Trae cambios del remoto sin fusionar.
+- **Actualizar y Fusionar**: `git pull`
+    - Descarga (`fetch`) y luego fusiona (`merge`) cambios del remoto.
+- **Publicar Cambios**:
+    - **Rama Actual**: `git push`
+    - **Rama Específica**: `git push [Remoto] [NombreRama]`
+    - **Establecer Seguimiento**: `git push -u [Remoto] [NombreRama]`
+
+## Fusionar Ramas
+
+- **Fusionar**: `git merge [NombreRama]`
+    - Combina cambios de `[NombreRama]` en la rama actual.
+
+## Reorganización de Commits con Rebase
+
+- **Reorganizar Commits**: `git rebase [base]`
+    - Aplica los cambios de la rama actual sobre `[base]`. Útil para mantener una historia lineal.
+    - **Uso Básico**: `git rebase master`
+        - Aplica los cambios de la rama actual sobre `master`.
+    - **Interactivo**: `git rebase -i [base]`
+        - Permite editar, combinar, o eliminar commits en la reorganización.
+    - **Continuar después de resolver conflictos**: `git rebase --continue`
+        - Continúa el proceso de rebase después de resolver conflictos manualmente.
+    - **Abortar Rebase**: `git rebase --abort`
+        - Cancela el proceso de rebase y vuelve al estado anterior.
+    - **Saltar Commit**: `git rebase --skip`
+        - Se utiliza para omitir un commit durante el proceso de rebase.
