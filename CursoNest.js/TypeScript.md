@@ -98,3 +98,31 @@ console.log(pokemons);
 
 ## Clases y Forma Abreviada
 
+En TypeScript, las clases son una forma poderosa de encapsular código y representar entidades con propiedades y métodos. Permiten definir un modelo para crear objetos con características y comportamientos específicos. TypeScript añade funcionalidades de tipado y visibilidad a las clases de JavaScript.
+
+```typescript
+// Forma Tradicional
+export class Pokemon1 {
+  public id: number;
+  public name: string;
+
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+// Forma Abreviada de declarar una clase
+export class Pokemon2 {
+  constructor(public id: number, public name: string) {}
+}
+
+export const charmander = new Pokemon1(4, "Charmander");
+export const squirtle = new Pokemon2(4, "Squirtle");
+```
+
+- **Anexo**: 03-classes.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+## Getters, Métodos y THIS
+
