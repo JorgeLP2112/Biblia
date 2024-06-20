@@ -197,3 +197,78 @@ async getMoves() {
 
 ## Inyección de Dependencias
 
+La inyección de dependencias es un patrón de diseño utilizado en la programación para lograr la inversión de control entre clases y sus dependencias. En lugar de que una clase cree internamente sus dependencias, estas se le pasan desde fuera, lo que facilita la modularidad, la flexibilidad y la prueba del código.
+
+- **Definición de Interfaces o Clases Abstractas**: Se definen interfaces o clases abstractas para las dependencias. Esto permite que el código dependa de abstracciones en lugar de implementaciones concretas.
+
+- **Implementación de Dependencias**: Se crean implementaciones concretas de estas interfaces o clases abstractas.
+
+- **Inyección de Dependencias**: Las instancias de las dependencias (objetos) se "inyectan" en las clases que las necesitan a través de constructores, métodos setter o directamente en las propiedades. Esto se puede hacer manualmente o mediante contenedores de inyección de dependencias que automatizan este proceso.
+
+- **Uso de Dependencias**: La clase que recibe las dependencias las utiliza para realizar sus funciones, sin necesidad de saber cómo se crean o se gestionan estas dependencias.
+
+```typescript
+import axios from "axios";
+
+export class PokeApiAdapter {
+  private readonly axios = axios;
+
+  async get(url: string) {
+    const { data } = await this.axios.get(url);
+    return data;
+  }
+
+  async post(url: string, data: any) {}
+
+  async patch(url: string, data: any) {}
+
+  async delete(url: string) {}
+}
+
+//////////////////////////////////////////////////////////////
+
+import {
+  Move,
+  PokeapiResponse,
+} from "../interfaces/pokeapi-response.interface";
+import { PokeApiAdapter } from "../api/pokeapi.adapter";
+
+export class Pokemon {
+  get imageUrl(): string {
+    return `https://pokemon.com/${this.id}.jpg`;
+  }
+
+  constructor(
+    public readonly id: number,
+    public name: string,
+    // Todo: inyectar dependencias
+    private readonly http: PokeApiAdapter
+  ) {}
+
+  scream() {
+    console.log(`${this.name.toUpperCase()}!!!`);
+  }
+
+  speak() {
+    console.log(`${this.name}, ${this.name}`);
+  }
+
+  async getMoves(): Promise<Move[]> {
+    const data = await this.http.get("https://pokeapi.co/api/v2/pokemon/4");
+    console.log(data.moves);
+
+    return data.moves;
+  }
+}
+
+const pokeApi = new PokeApiAdapter();
+
+export const charmander = new Pokemon(4, "Charmander", pokeApi);
+
+charmander.getMoves();
+```
+
+- **Anexo**: 04-injection.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+## Genéricos y Sustitución de Liskov
