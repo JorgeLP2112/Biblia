@@ -272,3 +272,205 @@ charmander.getMoves();
 - **Ruta**: NestIntroType/typescript-intro/src/bases/...
 
 ## Genéricos y Sustitución de Liskov
+
+### Tipos Genéricos
+
+Los tipos genéricos en TypeScript permiten crear componentes que pueden trabajar con cualquier tipo de dato. Esto proporciona una manera de asegurar la consistencia de tipo a lo largo de tu código mientras mantienes la flexibilidad para trabajar con diferentes tipos de datos.
+
+- **Definición de Tipo Genérico**: Se define un tipo genérico utilizando el símbolo <T>, donde T es un marcador de posición para el tipo de dato que se utilizará. Este marcador de posición puede ser reemplazado por cualquier tipo cuando se invoca el componente genérico.
+
+- **Uso de Tipo Genérico**: Cuando se utiliza un componente genérico, se especifica el tipo de dato concreto que reemplazará al marcador de posición T. Esto permite que el componente opere con ese tipo de dato específico.
+
+- **Flexibilidad**: Los tipos genéricos permiten escribir funciones, clases, e interfaces que pueden trabajar con cualquier tipo de dato, lo que aumenta la reusabilidad y la flexibilidad del código.
+
+- **Seguridad de Tipo**: A pesar de su flexibilidad, los tipos genéricos ayudan a mantener la seguridad de tipo en el código, asegurando que las operaciones realizadas sean apropiadas para el tipo de dato con el que se está trabajando.
+
+```typescript
+export class PokeApiFetchAdapter {
+  async get<T>(url: string): Promise<T> {
+    const resp = await fetch(url);
+    const data: T = await resp.json();
+    return data;
+  }
+}
+```
+
+- `<T>`: Es un tipo genérico que representa el tipo de dato que se espera como respuesta del método get. Esto permite que el método get sea reutilizable y pueda trabajar con diferentes tipos de datos de respuesta.
+
+- `Promise<T>`: Indica que el método get devuelve una promesa que, cuando se resuelve, contiene un valor del tipo T.
+
+### Sustitución de Liskov
+
+El principio de sustitución de Liskov (LSP) es un concepto en programación orientada a objetos que dice que si una clase S es un subtipo de una clase T, entonces los objetos de tipo T en un programa pueden ser reemplazados con objetos de tipo S sin alterar ninguna de las propiedades deseables del programa (corrección, tarea realizada, etc.). Este principio se centra en asegurar que una subclase pueda reemplazar a su superclase sin afectar el comportamiento del programa.
+
+```typescript
+import axios from "axios";
+
+export interface HttpAdapter {
+  get<T>(url: string): Promise<T>;
+}
+export class PokeApiFetchAdapter implements HttpAdapter {
+  async get<T>(url: string): Promise<T> {
+    const resp = await fetch(url);
+    const data: T = await resp.json();
+    console.log("Fetch");
+    return data;
+  }
+}
+export class PokeApiAdapter implements HttpAdapter {
+  private readonly axios = axios;
+
+  async get<T>(url: string): Promise<T> {
+    const { data } = await this.axios.get<T>(url);
+    console.log("Axios");
+    return data;
+  }
+
+  async post(url: string, data: any) {}
+
+  async patch(url: string, data: any) {}
+
+  async delete(url: string) {}
+}
+```
+
+El principio de sustitución de Liskov (LSP) se aplica a través de la interfaz HttpAdapter y sus implementaciones PokeApiFetchAdapter y PokeApiAdapter. Aquí está cómo se aplica el LSP paso a paso:
+
+- **Definición de la interfaz HttpAdapter**: Esta interfaz define un contrato con un método `get<T>(url: string): Promise<T>`. Cualquier clase que implemente esta interfaz debe proporcionar una implementación para este método.
+
+- **Implementación de la interfaz por PokeApiFetchAdapter y PokeApiAdapter**: Ambas clases implementan la interfaz `HttpAdapter`, lo que significa que ambas deben proporcionar una implementación del método get.
+
+- **Sustitución**: Debido a que ambas clases implementan la misma interfaz, objetos de `PokeApiFetchAdapter` o `PokeApiAdapter` pueden ser utilizados de manera intercambiable en cualquier lugar donde se espere un `HttpAdapter`. Esto es directamente lo que el LSP establece: si `S` es un subtipo de `T`, entonces objetos de tipo `T` pueden ser sustituidos con objetos de tipo `S` (en este caso, `HttpAdapter` es `T`, y `PokeApiFetchAdapter` y `PokeApiAdapter` son `S`).
+
+- **Preservación del comportamiento**: Para cumplir completamente con el LSP, no solo es necesario que las subclases puedan ser sustituidas por su superclase (o interfaz), sino que también deben preservar el comportamiento esperado. En tu código, esto significa que tanto `PokeApiFetchAdapter` como `PokeApiAdapter` deben cumplir con el contrato de `HttpAdapter` no solo en términos de interfaz sino también en comportamiento. Ambas clases deben poder realizar una petición GET y retornar los datos esperados sin causar efectos secundarios inesperados o errores en el programa.
+
+- **Extensibilidad**: Aunque `PokeApiAdapter` implementa métodos adicionales (post, patch, delete), esto no viola el LSP, ya que la sustitución se basa en el cumplimiento del contrato de `HttpAdapter`. Los métodos adicionales son simplemente funcionalidades extendidas que no afectan la capacidad de `PokeApiAdapter` para actuar como un `HttpAdapter`.
+
+```typescript
+// Abstracción que define un contrato para las operaciones HTTP
+private readonly http: HttpAdapter
+
+// Implementaciones concretas que pueden ser intercambiadas sin afectar el funcionamiento de la clase `Pokemon`
+const pokeApiAxios = new PokeApiAdapter();
+const pokeApiFetch = new PokeApiFetchAdapter();
+
+// Uso de diferentes implementaciones concretas sin alterar el comportamiento esperado
+export const charmander = new Pokemon(4, "Charmander", pokeApiFetch);
+export const charmeleon = new Pokemon(5, "Charmeleon", pokeApiAxios);
+```
+
+En el caso del archivo 04-injection.ts, se ve que las 3 partes descritas del código cumplen con el principio de Liskov.
+
+- **Anexo**: 04-injection.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+## Decoradores
+
+### Decorador de Clase
+
+Los decoradores de clase en TypeScript son funciones especiales que ofrecen una manera de añadir anotaciones y una sintaxis metaprogramática para observaciones y modificaciones de clases. Se ejecutan en tiempo de definición de la clase, es decir, cuando el código se está ejecutando y no cuando se instancian objetos de la clase. Aquí te explico paso a paso cómo funcionan los decoradores de clase en el contexto del código proporcionado:
+
+- **Definición de un Decorador**: Un decorador es una función que se utiliza para modificar, observar o reemplazar la definición de una clase. En el código, MyDecorator es un ejemplo de un decorador de clase. Este decorador no hace mucho, ya que simplemente devuelve la clase NewPokemon, pero sirve como un buen ejemplo para entender la sintaxis básica.
+
+- **Sintaxis del Decorador**: Para aplicar un decorador a una clase, se utiliza el símbolo @ seguido del nombre del decorador y se coloca justo antes de la definición de la clase. En el código, @MyDecorator() se aplica a la clase Pokemon. Esto significa que cuando se define la clase Pokemon, TypeScript primero ejecutará MyDecorator().
+
+- **Cómo Funciona MyDecorator**: El decorador MyDecorator es una función que devuelve otra función. La función interna recibe un argumento target, que es el constructor de la clase a la que se aplica el decorador. En este caso, target sería el constructor de Pokemon. Sin embargo, el decorador en este ejemplo no utiliza el target para nada; simplemente devuelve la clase NewPokemon. Esto no es un patrón común en el uso real de decoradores, ya que normalmente se esperaría que el decorador modifique o utilice de alguna manera el target.
+
+- **Propósito y Uso**: Los decoradores pueden ser utilizados para añadir metadatos, propiedades o métodos a la clase, o incluso para reemplazar completamente la definición de la clase. Son una herramienta poderosa para la metaprogramación. En frameworks como Angular, los decoradores son fundamentales para definir componentes, servicios, y otras entidades.
+
+```typescript
+class NewPokemon {
+  constructor(public readonly id: number, public name: string) {}
+
+  scream() {
+    console.log(`NO QUIERO!!`);
+  }
+
+  speak() {
+    console.log(`NO QUIERO HABLAR!!`);
+  }
+}
+
+const MyDecorator = () => {
+  return (target: Function) => {
+    // console.log(target)
+    return NewPokemon;
+  };
+};
+
+@MyDecorator()
+export class Pokemon {
+  constructor(public readonly id: number, public name: string) {}
+
+  scream() {
+    console.log(`${this.name.toUpperCase()}!!!`);
+  }
+
+  speak() {
+    console.log(`${this.name}, ${this.name}`);
+  }
+}
+```
+
+- **Anexo**: 05-decorators.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+### Decorados de Método
+
+Los decoradores de métodos en TypeScript son funciones especiales que se pueden adjuntar a la declaración de un método, accesorio, o propiedad en una clase. Permiten observar, modificar o reemplazar definiciones de métodos. Los decoradores proporcionan una manera de añadir tanto anotaciones como una meta-programación sintáctica a la clase y sus miembros.
+
+En el código proporcionado, se define un decorador llamado Deprecated. Este decorador se utiliza para marcar métodos específicos en una clase como obsoletos/depreciados. Aquí está el desglose de cómo funciona este decorador:
+
+- **Definición del Decorador Deprecated**: Este decorador toma un argumento `deprecationReason`, que es una cadena describiendo por qué el método ha sido marcado como obsoleto.
+
+- **Función del Decorador**: El decorador Deprecated es una función de fábrica que devuelve otra función. Esta función interna es la que actúa como el decorador propiamente dicho. Recibe tres parámetros:
+
+  - `target`: El constructor de la clase para un miembro estático, o el prototipo de la clase para un miembro de instancia.
+  - `memberName`: El nombre del miembro (método, propiedad) al que se aplica el decorador.
+  - `propertyDescriptor`: Un objeto que describe la propiedad, incluyendo su configurabilidad, enumerabilidad, escriturabilidad, y el valor.
+
+- **Funcionalidad del Decorador**: Dentro del decorador, se modifica el descriptor de la propiedad (en este caso, un método) para que, cuando se llame al método, primero se muestre una advertencia en la consola indicando que el método está obsoleto, junto con la razón de su obsolescencia. Luego, se llama al método original con los argumentos proporcionados.
+
+- **Aplicación del Decorador**: El decorador Deprecated se aplica al método `speak` de la clase `Pokemon` usando la sintaxis `@Deprecated("Must use speak2 instead")`. Esto significa que cada vez que se llame al método `speak` de una instancia de `Pokemon`, se mostrará la advertencia de obsolescencia antes de ejecutar el código original del método.
+
+- **Ejemplo de Uso**: Al final del código, se crea una instancia de `Pokemon` llamada `charmander` y se llama al método `speak`. Debido a que `speak` está decorado con Deprecated, se mostrará la advertencia de obsolescencia en la consola antes de mostrar el mensaje original del método `speak`.
+
+```typescript
+const Deprecated = (deprecationReason: string) => {
+  return (
+    target: any,
+    memberName: string,
+    propertyDescriptor: PropertyDescriptor
+  ) => {
+    // console.log({target})
+    return {
+      get() {
+        const wrapperFn = (...args: any[]) => {
+          console.warn(
+            `Method ${memberName} is deprecated with reason: ${deprecationReason}`
+          );
+          //! Llamar la función propiamente con sus argumentos
+          propertyDescriptor.value.apply(this, args);
+        };
+        return wrapperFn;
+      },
+    };
+  };
+};
+
+export class Pokemon {
+  constructor(public readonly id: number, public name: string) {}
+
+  scream() {
+    console.log(`${this.name.toUpperCase()}!!!`);
+  }
+
+  @Deprecated("Must use speak2 instead")
+  speak() {
+    console.log(`${this.name}, ${this.name}`);
+  }
+}
+```
+
+- **Anexo**: 06-decorators2.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...

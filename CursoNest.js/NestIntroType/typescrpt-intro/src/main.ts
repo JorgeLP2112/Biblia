@@ -1,7 +1,11 @@
 //import { Name, age } from "./bases/01-types.ts";
 // ESpecificar elementos de exportación
 // Si se tiene export default se puede importar sin llaves
-import { charmander } from "./bases/04-injection.ts";
+
+//import { charmander } from "./bases/03-classes.ts";
+//import { charmander } from "./bases/04-injection.ts";
+//import { charmander } from "./bases/05-decorators.ts";
+import { charmander } from "./bases/06-decorators2.ts";
 import "./style.css";
 import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
