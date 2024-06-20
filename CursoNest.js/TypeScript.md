@@ -126,3 +126,74 @@ export const squirtle = new Pokemon2(4, "Squirtle");
 
 ## Getters, Métodos y THIS
 
+El concepto de getter en TypeScript, ilustrado en la clase Pokemon3 del fragmento de código, es una forma de definir métodos de acceso en una clase que se comportan como propiedades. Los getters permiten ejecutar una función cuando se accede a una propiedad específica de un objeto, pero sin necesidad de llamar a la función con paréntesis () como lo harías normalmente. Esto es útil para calcular o modificar dinámicamente el valor de una propiedad antes de devolverla.
+
+```typescript
+export class Pokemon3 {
+  get imageUrl() {
+    return `https://pokeapi.co/api/v2/pokemon/${this.id}/`;
+  }
+
+  constructor(public id: number, public name: string) {}
+
+  scream() {
+    console.log(`${this.name.toUpperCase()}!!!`);
+  }
+
+  speak() {
+    console.log(`${this.name}, ${this.name}`);
+  }
+}
+```
+
+Este getter permite acceder a la URL de la imagen de un Pokémon específico de forma dinámica, utilizando el id del Pokémon. Cuando accedes a pokemon.imageUrl, se ejecuta el código dentro del getter y se devuelve la URL formateada, sin necesidad de llamar a imageUrl como si fuera un método (pokemon.imageUrl()).
+
+El uso de this dentro del getter hace referencia a la instancia actual de la clase, permitiendo acceder a sus propiedades, como id en este caso.
+
+- **Anexo**: 03-classes.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+## Métodos Asíncronos
+
+El método getMoves en la clase Pokemon3 es un ejemplo de cómo realizar solicitudes HTTP asincrónicas en TypeScript utilizando async/await y la desestructuración de objetos.
+
+```typescript
+async getMoves() {
+  const { data } = await axios.get(
+    `https://pokeapi.co/api/v2/pokemon/${this.id}/`
+  );
+
+  console.log(data.moves);
+  return data.moves;
+}
+```
+
+- **async**: La palabra clave async antes de la definición de la función indica que getMoves es una función asíncrona. Esto significa que la función puede realizar operaciones asincrónicas, como solicitudes de red, y esperar a que estas operaciones se completen sin bloquear la ejecución del resto del código. Las funciones asíncronas siempre devuelven una promesa.
+
+- **await**: Dentro de una función async, puedes utilizar la palabra clave await para esperar a que se resuelva una promesa. En este caso, await axios.get(...) pausa la ejecución de getMoves en ese punto hasta que la solicitud HTTP realizada por axios.get se complete y devuelva una respuesta. Esto permite tratar operaciones asincrónicas como si fueran sincrónicas, haciendo que el código sea más legible y fácil de seguir.
+
+- **Desestructuración**: La desestructuración es una característica de JavaScript que permite extraer datos de arreglos u objetos en variables separadas de una manera más concisa. En el ejemplo, { data } = await axios.get(...) desestructura el objeto resultante de la promesa resuelta por axios.get. Esto significa que en lugar de tener que acceder a la respuesta con algo como response.data, directamente se obtiene el objeto data que contiene la información deseada. En este caso, data contiene la respuesta de la API con los datos del Pokémon, incluyendo sus movimientos.
+
+- **Anexo**: 03-classes.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+## Tipo de Datos en Respuesta HTTP
+
+En TypeScript podemos agregar el tipo de dato que queremos que regresen las peticiones por medio de las interfaces, como se puede ver en el siguiente ejemplo:
+
+```typescript
+async getMoves() {
+    const { data } = await axios.get<PokeapiResponse>(
+      `https://pokeapi.co/api/v2/pokemon/${this.id}/`
+    );
+
+    console.log(data.moves);
+    return data.moves;
+}
+```
+
+- **Anexo**: 03-classes.ts
+- **Ruta**: NestIntroType/typescript-intro/src/bases/...
+
+## Inyección de Dependencias
+
