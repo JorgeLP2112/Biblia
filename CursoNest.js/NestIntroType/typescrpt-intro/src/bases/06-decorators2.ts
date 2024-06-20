@@ -4,7 +4,7 @@ const Deprecated = (deprecationReason: string) => {
     memberName: string,
     propertyDescriptor: PropertyDescriptor
   ) => {
-    // console.log({target})
+    console.log({ target });
     return {
       get() {
         const wrapperFn = (...args: any[]) => {
