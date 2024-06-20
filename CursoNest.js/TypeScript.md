@@ -19,6 +19,11 @@ Por último se deben instalar los módulos de Node:
 $ npm i
 ```
 
+Puertos por defecto:
+
+- **Linux**: 5173
+- **Windows**: 3000
+
 ## Tipos y Bases sobre Módulos
 
 En TypeScript podemos realizar archivos que declaren exportaciones e importaciones para nuestro código. A menudo se recomienda evitar el código ejecutable, ya que se va a realizar con una simple importación que hagamos, sin embargo queda sujeto al funcionamiento esperado del archivo. A continuación se muestra un ejemplo de los tipos de datos, exportaciones, importaciones e interpolaciones.
@@ -340,7 +345,7 @@ El principio de sustitución de Liskov (LSP) se aplica a través de la interfaz 
 
 - **Implementación de la interfaz por PokeApiFetchAdapter y PokeApiAdapter**: Ambas clases implementan la interfaz `HttpAdapter`, lo que significa que ambas deben proporcionar una implementación del método get.
 
-- **Sustitución**: Debido a que ambas clases implementan la misma interfaz, objetos de `PokeApiFetchAdapter` o `PokeApiAdapter` pueden ser utilizados de manera intercambiable en cualquier lugar donde se espere un `HttpAdapter`. Esto es directamente lo que el LSP establece: si `S` es un subtipo de `T`, entonces objetos de tipo `T` pueden ser sustituidos con objetos de tipo `S` (en este caso, `HttpAdapter` es `T`, y `PokeApiFetchAdapter` y `PokeApiAdapter` son `S`).
+- **Sustitución**: Debido a que ambas clases implementan la misma interlicación sobre cada archivo en un proyecto nuevo de Nest
 
 - **Preservación del comportamiento**: Para cumplir completamente con el LSP, no solo es necesario que las subclases puedan ser sustituidas por su superclase (o interfaz), sino que también deben preservar el comportamiento esperado. En tu código, esto significa que tanto `PokeApiFetchAdapter` como `PokeApiAdapter` deben cumplir con el contrato de `HttpAdapter` no solo en términos de interfaz sino también en comportamiento. Ambas clases deben poder realizar una petición GET y retornar los datos esperados sin causar efectos secundarios inesperados o errores en el programa.
 
