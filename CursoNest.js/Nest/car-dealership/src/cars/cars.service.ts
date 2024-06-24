@@ -10,7 +10,7 @@ import { CreateCarDto, UpdateCarDto } from './dto';
 @Injectable()
 export class CarsService {
   private cars: Car[] = [
-    {
+    /*{
       id: uuid(),
       brand: 'Toyota',
       model: 'Corolla',
@@ -24,7 +24,7 @@ export class CarsService {
       id: uuid(),
       brand: 'Jeep',
       model: 'Cherokee',
-    },
+    },*/
   ];
 
   // .find() es un método de los arrays de JavaScript que recibe una función como argumento
@@ -82,5 +82,9 @@ export class CarsService {
     this.cars = this.cars.filter((car) => car.id !== id);
 
     return car;
+  }
+
+  fillCarsWithSeedData(cars: Car[]) {
+    this.cars = cars;
   }
 }

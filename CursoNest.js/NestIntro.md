@@ -84,3 +84,17 @@ Los DTO (Data Transfer Object) en Nest.js son objetos que se utilizan para encap
 - **Documentación**: Al definir los datos de entrada y salida de las operaciones de la API mediante DTOs, se facilita la generación automática de documentación para la API, por ejemplo, usando herramientas como Swagger. Esto proporciona una referencia clara para los desarrolladores que consumen la API sobre qué datos enviar y qué esperar como respuesta.
 
 - **Mejora de la Seguridad**: Al validar y estructurar estrictamente los datos de entrada con DTOs, se reduce el riesgo de inyecciones maliciosas y otros vectores de ataque, ya que solo se aceptan los datos que cumplen con el esquema definido.
+
+## SEED de Carga de Datos
+
+Las SEED se refieren probablemente a un mecanismo o proceso utilizado para poblar la base de datos con datos iniciales o de prueba. Características: 
+
+- **Propósito de las Seed**: Las "seed" o semillas de datos se utilizan para inicializar bases de datos con datos necesarios para que la aplicación funcione correctamente desde el inicio. Esto puede incluir la creación de cuentas de usuario predeterminadas, configuraciones iniciales, o datos de prueba para desarrollo y pruebas.
+
+- **Desarrollo y Pruebas**: Durante el desarrollo y las fases de prueba, las "seed" permiten a los desarrolladores y testers trabajar con un conjunto de datos consistente. Esto es especialmente útil para garantizar que las pruebas sean reproducibles y para facilitar el desarrollo de características que dependen de ciertos datos preexistentes.
+
+- **Despliegue**: En el momento del despliegue, especialmente en entornos de producción, las "seed" pueden ser utilizadas para configurar la aplicación con los datos necesarios para su funcionamiento, como roles de usuario, configuraciones de sistema, etc.
+
+- **Implementación en Nest.js**: En Nest.js, las "seed" pueden ser implementadas de varias maneras, pero comúnmente se crean scripts o módulos específicos que se pueden ejecutar manualmente o automáticamente durante el proceso de despliegue o desarrollo. Estos scripts utilizan las APIs del framework y del ORM (Object-Relational Mapping) utilizado (como TypeORM, Sequelize, etc.) para insertar datos en la base de datos.
+
+- **Buenas Prácticas**: Es importante manejar las "seed" con cuidado, especialmente en entornos de producción, para evitar la sobreescritura de datos existentes o la exposición de datos sensibles. También es común tener diferentes sets de "seed" para desarrollo, pruebas, y producción, cada uno adaptado a las necesidades específicas de esos entornos.
