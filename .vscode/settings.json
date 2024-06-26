@@ -21,6 +21,7 @@
         "instancian",
         "instanciar",
         "Liskov",
+        "mantenible",
         "metaprogramación",
         "metaprogramática",
         "modularidad",
@@ -31,13 +32,16 @@
         "Pokeapi",
         "pokemon",
         "pokemons",
+        "postgres",
         "reusabilidad",
         "reutilizable",
         "serializa",
         "sobreescritura",
         "squirtle",
         "superclase",
+        "Teslo",
         "tipado",
-        "tipar"
+        "tipar",
+        "typeorm"
     ]
 }
