@@ -9,7 +9,7 @@ import {
 import { ProductImage } from './';
 
 // Las entities con TypeORM son clases que representan las tablas de la base de datos
-@Entity()
+@Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
