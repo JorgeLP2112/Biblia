@@ -1,11 +1,14 @@
 import {
   BeforeInsert,
-  //BeforeUpdate,
+  BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ProductImage } from './';
 
+// Las entities con TypeORM son clases que representan las tablas de la base de datos
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -32,6 +35,15 @@ export class Product {
   @Column('text')
   gender: string;
 
+  @Column('text', { array: true, default: [] })
+  tags: string[];
+
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    cascade: true,
+  })
+  images?: ProductImage[];
+
+  // El decorador BeforeInsert() se ejecuta antes de insertar un registro en la base de datos
   @BeforeInsert()
   checkSlugInsert() {
     if (!this.slug) {
@@ -43,5 +55,12 @@ export class Product {
       .replaceAll("'", '');
   }
 
-  //@BeforeUpdate()
+  // El decorador BeforeUpdate() se ejecuta antes de actualizar un registro en la base de datos
+  @BeforeUpdate()
+  checkSlugUpdate() {
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll("'", '');
+  }
 }
