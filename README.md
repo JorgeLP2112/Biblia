@@ -45,7 +45,8 @@
 ## :white_circle: **Servicios**
 
 - NGINX
+- WebSockets
 - Auth_request
 - Reverse Proxy
 - Api Gateway
-- Rbac
+- RBAC
