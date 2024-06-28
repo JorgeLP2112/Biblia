@@ -33,15 +33,15 @@ $ npm install --save @nestjs/typeorm typeorm pg
 Por último, hay que realizar la configuración en el modulo:
 
 ```typescript
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: "postgres",
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
       database: process.env.DB_NAME,
@@ -54,3 +54,47 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 })
 export class AppModule {}
 ```
+
+## Swagger
+
+Swagger es una suite de herramientas de software de código abierto utilizada para diseñar, construir, documentar y consumir servicios web RESTful. Proporciona especificaciones y un ecosistema de herramientas que permiten a los desarrolladores y organizaciones estandarizar y facilitar el trabajo con APIs REST.
+
+- **Swagger Editor**: Un editor basado en la web para escribir la especificación OpenAPI (anteriormente conocida como Swagger) que define la API, permitiendo diseñar y documentar la API de manera interactiva.
+
+- **Swagger UI**: Una herramienta que genera una página web con documentación interactiva de la API a partir de una especificación OpenAPI, permitiendo a los usuarios probar las llamadas a la API directamente desde el navegador.
+
+- **Swagger Codegen**: Permite generar código cliente y servidor en varios lenguajes de programación y frameworks a partir de una especificación OpenAPI, facilitando la implementación de clientes y servidores que consumen o proveen la API.
+
+- **Swagger Inspector**: Una herramienta para probar APIs RESTful y generar su documentación OpenAPI.
+
+La utilización de Swagger y la especificación OpenAPI ayuda a asegurar que la documentación de la API esté siempre actualizada con el código, mejora la comunicación entre equipos de desarrollo y facilita la creación de clientes de API al proporcionar generación automática de código.
+
+### Instalación y Configuración
+
+```
+$ npm install @nestjs/swagger
+```
+
+```typescript
+// Main.ts
+import { NestFactory } from "@nestjs/core";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { AppModule } from "./app.module";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle("Cats example")
+    .setDescription("The cats API description")
+    .setVersion("1.0")
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("api", app, document);
+
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+- Para más información, consultar: `https://docs.nestjs.com/openapi/introduction`.
