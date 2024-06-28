@@ -2,6 +2,8 @@
   "cSpell.ignoreWords": ["concatenarlas"],
   "cSpell.words": [
     "ABAC",
+    "adduser",
+    "applicación",
     "Asincrónica",
     "asincrónicas",
     "cabezera",
@@ -9,6 +11,7 @@
     "charmeleon",
     "Charmeleon",
     "Codegen",
+    "compat",
     "configurabilidad",
     "desencriptar",
     "desestructuración",
@@ -25,6 +28,7 @@
     "Extensibilidad",
     "instancian",
     "instanciar",
+    "libc",
     "Liskov",
     "mantenible",
     "metaprogramación",
@@ -37,8 +41,11 @@
     "Pikachu",
     "pokeapi",
     "Pokeapi",
+    "pokedex",
+    "pokedexapp",
     "pokemon",
     "pokemons",
+    "pokeuser",
     "postgres",
     "redirigiéndolas",
     "reusabilidad",
@@ -52,6 +59,7 @@
     "Teslo",
     "tipado",
     "tipar",
-    "typeorm"
+    "typeorm",
+    "WORKDIR"
   ]
 }
